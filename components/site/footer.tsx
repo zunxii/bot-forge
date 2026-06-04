@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer className="relative z-10">
       <Container className="pb-10 pt-4">
-        <div className="grid gap-10 border-t border-slate-200/70 py-10 lg:grid-cols-[1.1fr_0.9fr_0.9fr_0.9fr_0.9fr]">
+        <div className="grid gap-10 border-t border-slate-200/70 py-10 lg:grid-cols-[1.15fr_0.85fr_0.85fr_0.85fr_0.85fr]">
           <div>
             <Link href="#" className="flex items-center gap-3">
               <div className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-slate-950 text-sm font-semibold text-white shadow-md shadow-slate-900/20">
@@ -25,7 +25,7 @@ export function Footer() {
               {[Globe, MessageSquare, Workflow, Shield].map((Icon, i) => (
                 <div
                   key={i}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white shadow-[0_8px_16px_rgba(15,23,42,0.035)]"
                 >
                   <Icon className="h-4 w-4" />
                 </div>
@@ -34,22 +34,10 @@ export function Footer() {
           </div>
 
           {[
-            {
-              title: "Product",
-              items: ["Platform", "Use cases", "Pricing", "Changelog"],
-            },
-            {
-              title: "Resources",
-              items: ["Docs", "Guides", "API Reference", "Help center"],
-            },
-            {
-              title: "Company",
-              items: ["About", "Careers", "Contact", "Privacy"],
-            },
-            {
-              title: "Legal",
-              items: ["Terms", "Security", "Privacy Policy"],
-            },
+            { title: "Product", items: ["Platform", "Use cases", "Pricing", "Changelog"] },
+            { title: "Resources", items: ["Docs", "Guides", "API Reference", "Help center"] },
+            { title: "Company", items: ["About", "Careers", "Contact", "Privacy"] },
+            { title: "Legal", items: ["Terms", "Security", "Privacy Policy"] },
           ].map((col) => (
             <div key={col.title}>
               <div className="text-[14px] font-semibold text-slate-900">{col.title}</div>

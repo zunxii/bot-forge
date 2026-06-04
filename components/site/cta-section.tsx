@@ -8,25 +8,25 @@ export function CTASection() {
     <section className="relative z-10">
       <Container className="py-16 lg:py-24">
         <GlassCard className="relative overflow-hidden px-6 py-14 text-center sm:px-10 lg:px-14">
-          <div className="pointer-events-none absolute left-3 top-10 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7888ff] rotate-[-18deg] shadow-sm">
+          <div className="pointer-events-none absolute left-5 top-8 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7888ff] rotate-[-16deg] shadow-sm">
               <span className="text-xl font-semibold">T</span>
             </div>
           </div>
 
-          <div className="pointer-events-none absolute right-6 top-8 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7888ff] rotate-[15deg] shadow-sm">
+          <div className="pointer-events-none absolute right-6 top-7 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7888ff] rotate-[14deg] shadow-sm">
               <Globe className="h-5 w-5" />
             </div>
           </div>
 
-          <div className="pointer-events-none absolute left-[12%] bottom-6 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
+          <div className="pointer-events-none absolute left-[13%] bottom-6 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7888ff] rotate-[-8deg] shadow-sm">
               <Zap className="h-5 w-5" />
             </div>
           </div>
 
-          <div className="pointer-events-none absolute right-[12%] bottom-8 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
+          <div className="pointer-events-none absolute right-[13%] bottom-8 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7888ff] rotate-[10deg] shadow-sm">
               <Sparkles className="h-5 w-5" />
             </div>

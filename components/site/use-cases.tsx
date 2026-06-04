@@ -29,7 +29,7 @@ const useCases = [
 export function UseCases() {
   return (
     <section className="relative z-10">
-      <Container className="py-12 lg:py-20">
+      <Container className="py-14 lg:py-20">
         <div className="flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-end">
           <div>
             <SectionLabel>Built for your business</SectionLabel>

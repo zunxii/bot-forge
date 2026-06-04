@@ -9,11 +9,11 @@ import { Footer } from "@/components/site/footer";
 
 export default function Page() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#f7f9ff] text-slate-900">
+    <main className="relative min-h-screen overflow-hidden bg-[#f8faff] text-slate-900">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-10%] top-[-15%] h-[540px] w-[540px] rounded-full bg-[radial-gradient(circle,rgba(124,150,255,0.32)_0%,rgba(124,150,255,0.12)_28%,rgba(255,255,255,0)_68%)] blur-3xl" />
-        <div className="absolute right-[-8%] top-[10%] h-[580px] w-[580px] rounded-full bg-[radial-gradient(circle,rgba(148,171,255,0.24)_0%,rgba(148,171,255,0.10)_26%,rgba(255,255,255,0)_68%)] blur-3xl" />
-        <div className="absolute bottom-[12%] left-[20%] h-[380px] w-[380px] rounded-full bg-[radial-gradient(circle,rgba(132,155,255,0.16)_0%,rgba(255,255,255,0)_72%)] blur-3xl" />
+        <div className="absolute left-[-12%] top-[-18%] h-[640px] w-[640px] rounded-full bg-[radial-gradient(circle,rgba(129,151,255,0.26)_0%,rgba(129,151,255,0.12)_30%,rgba(255,255,255,0)_72%)] blur-3xl" />
+        <div className="absolute right-[-10%] top-[8%] h-[700px] w-[700px] rounded-full bg-[radial-gradient(circle,rgba(156,172,255,0.18)_0%,rgba(156,172,255,0.08)_30%,rgba(255,255,255,0)_72%)] blur-3xl" />
+        <div className="absolute bottom-[10%] left-[18%] h-[440px] w-[440px] rounded-full bg-[radial-gradient(circle,rgba(136,156,255,0.12)_0%,rgba(255,255,255,0)_72%)] blur-3xl" />
       </div>
 
       <Navbar />
