@@ -12,10 +12,10 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll();
         },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options);
-          });
+
+        setAll() {
+          // Cookie writes are not allowed in Server Components.
+          // Middleware will handle session refreshes.
         },
       },
     }

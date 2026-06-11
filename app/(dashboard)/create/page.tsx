@@ -1,11 +1,5 @@
-import React from 'react'
+import { CreateAssistantPage } from "@/components/create-assistant/create-assistant-page";
 
-const page = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+export default function Page() {
+  return <CreateAssistantPage />;
 }
-
-export default page
