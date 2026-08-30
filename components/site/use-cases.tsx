@@ -30,7 +30,7 @@ export function UseCases() {
   return (
     <section className="relative z-10">
       <Container className="py-14 lg:py-20">
-        <div className="flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-end">
+        <div className="reveal flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-end">
           <div>
             <SectionLabel>Built for your business</SectionLabel>
             <h2 className="max-w-[520px] text-[38px] font-semibold leading-[1.02] tracking-[-0.05em] text-slate-950 sm:text-[46px]">
@@ -45,11 +45,14 @@ export function UseCases() {
         </div>
 
         <div className="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {useCases.map((item) => {
+          {useCases.map((item, i) => {
             const Icon = item.icon;
             return (
-              <GlassCard key={item.title} className="p-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7284ff]">
+              <GlassCard
+                key={item.title}
+                className={`card-lift reveal reveal-delay-${Math.min(i + 1, 4)} p-6 cursor-default`}
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7284ff] transition-transform duration-200 group-hover:scale-110">
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="mt-5 text-[18px] font-semibold tracking-[-0.03em] text-slate-900">

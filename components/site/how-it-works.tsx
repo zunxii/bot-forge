@@ -1,7 +1,21 @@
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { GlassCard } from "@/components/ui/glass-card";
-import { ArrowRight, Boxes, LayoutGrid, Sparkles, Workflow } from "lucide-react";
+import { 
+  ArrowRight, 
+  Boxes, 
+  Globe, 
+  LayoutGrid, 
+  Sparkles, 
+  Workflow, 
+  Palette, 
+  Settings, 
+  BarChart2, 
+  Cpu, 
+  HelpCircle, 
+  FileText, 
+  FileSpreadsheet 
+} from "lucide-react";
 
 const features = [
   {
@@ -31,56 +45,70 @@ const sourceItems = [
     title: "Website",
     subtitle: "https://yourstore.com",
     status: "Indexed",
-    icon: GlobeIcon,
+    icon: Globe,
+    iconBg: "bg-indigo-50",
+    iconColor: "text-indigo-600",
   },
   {
     title: "FAQs",
     subtitle: "Imported 245 items",
     status: "Parsed",
-    icon: LayoutGrid,
+    icon: FileText,
+    iconBg: "bg-indigo-50",
+    iconColor: "text-indigo-600",
   },
   {
     title: "Policy.pdf",
     subtitle: "Uploaded 2 days ago",
     status: "Indexed",
-    icon: FileIcon,
+    icon: FileText,
+    iconBg: "bg-rose-50",
+    iconColor: "text-rose-600",
   },
   {
     title: "Products.csv",
     subtitle: "12,430 products",
     status: "Indexed",
-    icon: DatabaseIcon,
+    icon: FileSpreadsheet,
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
   },
 ];
 
-function GlobeIcon() {
-  return <span className="text-[13px]">◌</span>;
-}
-function FileIcon() {
-  return <span className="text-[13px]">▣</span>;
-}
-function DatabaseIcon() {
-  return <span className="text-[13px]">◫</span>;
-}
+const sidebarItems = [
+  { label: "Sources", icon: LayoutGrid },
+  { label: "Data Connections", icon: Workflow },
+  { label: "Appearance", icon: Palette },
+  { label: "Behavior", icon: Cpu },
+  { label: "Deploy", icon: Boxes },
+  { label: "Analytics", icon: BarChart2 },
+  { label: "Settings", icon: Settings },
+];
 
 export function HowItWorks() {
   return (
     <section className="relative z-10">
       <Container className="py-16 lg:py-20">
         <div className="grid gap-8 lg:grid-cols-[0.86fr_1.14fr] lg:gap-12">
+          {/* Left: text + steps */}
           <div className="pt-2">
-            <SectionLabel>How it works</SectionLabel>
-            <h2 className="max-w-[420px] text-[38px] font-semibold leading-[1.02] tracking-[-0.05em] text-slate-950 sm:text-[46px]">
-              Connect your data.
-              <br />
-              Deliver real answers.
-            </h2>
+            <div className="reveal">
+              <SectionLabel>How it works</SectionLabel>
+              <h2 className="max-w-[420px] text-[38px] font-semibold leading-[1.02] tracking-[-0.05em] text-slate-950 sm:text-[46px]">
+                Connect your data.
+                <br />
+                Deliver real answers.
+              </h2>
+            </div>
 
             <div className="mt-8 space-y-6">
-              {features.map((item) => {
+              {features.map((item, i) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.title} className="flex items-start gap-4">
+                  <div
+                    key={item.title}
+                    className={`reveal reveal-delay-${Math.min(i + 1, 4)} flex items-start gap-4`}
+                  >
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-[#8796ff] shadow-[0_8px_18px_rgba(15,23,42,0.04)]">
                       <Icon className="h-5 w-5" />
                     </div>
@@ -95,44 +123,51 @@ export function HowItWorks() {
 
             <a
               href="#"
-              className="mt-8 inline-flex h-12 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 text-[14px] font-semibold text-slate-800 shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5"
+              className="reveal mt-8 inline-flex h-12 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 text-[14px] font-semibold text-slate-800 shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5"
             >
               Explore the platform
               <ArrowRight className="h-4 w-4" />
             </a>
           </div>
 
-          <div className="relative">
-            <GlassCard className="overflow-hidden px-4 py-4 sm:px-5 sm:py-5">
+          {/* Right: dashboard UI mock */}
+          <div className="reveal relative">
+            <GlassCard className="px-4 py-4 sm:px-5 sm:py-5">
+              {/* Window chrome dots */}
               <div className="mb-3 flex items-center gap-1.5 px-1">
-                <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
-                <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
-                <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#ff6b6b]/70" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#ffd93d]/70" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#6bcb77]/70" />
               </div>
 
               <div className="grid gap-4 md:grid-cols-[0.34fr_0.66fr]">
-                <div className="rounded-[22px] border border-slate-200 bg-[#fbfcff] px-4 py-4">
-                  <div className="mb-4 text-[12px] font-semibold text-slate-800">Your Assistant</div>
-                  <div className="space-y-1 text-[13px] text-slate-500">
-                    {["Sources", "Data Connections", "Appearance", "Behavior", "Deploy", "Analytics", "Settings"].map(
-                      (item, idx) => (
+                {/* Sidebar nav */}
+                <div className="rounded-[22px] border border-slate-200 bg-[#fbfcff] px-3 py-4">
+                  <div className="mb-4 px-2 text-[12px] font-semibold text-slate-800">Your Assistant</div>
+                  <div className="space-y-0.5 text-[13px] text-slate-500">
+                    {sidebarItems.map((item, idx) => {
+                      const Icon = item.icon;
+                      return (
                         <div
-                          key={item}
-                          className={`flex items-center gap-2 rounded-xl px-3 py-2 ${
-                            idx === 0 ? "bg-[#eef2ff] text-[#637cff]" : ""
+                          key={item.label}
+                          className={`flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13px] transition ${
+                            idx === 0
+                              ? "bg-indigo-50 font-semibold text-indigo-600"
+                              : "text-slate-600 hover:bg-slate-100"
                           }`}
                         >
-                          <span className={`h-2 w-2 rounded-full ${idx === 0 ? "bg-[#637cff]" : "bg-slate-300"}`} />
-                          {item}
+                          <Icon className="h-[18px] w-[18px]" />
+                          {item.label}
                         </div>
-                      )
-                    )}
+                      );
+                    })}
                   </div>
                 </div>
 
-                <div className="rounded-[22px] border border-slate-200 bg-white px-4 py-4">
-                  <div className="text-[16px] font-semibold text-slate-900">Sources</div>
-                  <div className="mt-1 text-[12px] text-slate-500">
+                {/* Sources panel */}
+                <div className="rounded-[22px] border border-slate-200 bg-white px-5 py-5">
+                  <div className="text-base font-semibold text-slate-900">Sources</div>
+                  <div className="mt-1 text-[13px] text-slate-500">
                     Add or manage knowledge sources for your assistant.
                   </div>
 
@@ -142,18 +177,18 @@ export function HowItWorks() {
                       return (
                         <div
                           key={item.title}
-                          className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#fbfcff] px-4 py-3"
+                          className="flex items-center justify-between rounded-[16px] border border-slate-100 bg-white px-4 py-3 shadow-[0_2px_10px_rgba(15,23,42,0.02)] transition hover:border-slate-200"
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eef2ff] text-[#6b7dff]">
-                              <Icon />
+                          <div className="flex items-center gap-3.5">
+                            <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${item.iconBg} ${item.iconColor}`}>
+                              <Icon className="h-[18px] w-[18px]" />
                             </div>
                             <div>
                               <div className="text-[13px] font-semibold text-slate-900">{item.title}</div>
                               <div className="text-[12px] text-slate-500">{item.subtitle}</div>
                             </div>
                           </div>
-                          <div className="rounded-full bg-emerald-50 px-3 py-1 text-[12px] font-semibold text-emerald-600">
+                          <div className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-600">
                             {item.status}
                           </div>
                         </div>
@@ -161,22 +196,23 @@ export function HowItWorks() {
                     })}
                   </div>
 
-                  <button className="mt-4 inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-[13px] font-semibold text-slate-700 shadow-sm">
-                    <span className="text-lg leading-none">+</span> Add source
+                  <button className="mt-4 inline-flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-[13px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50">
+                    <span className="text-base leading-none text-slate-400">+</span> Add source
                   </button>
                 </div>
               </div>
 
-              <div className="mt-4 grid gap-3 sm:grid-cols-4">
+              {/* Stats row */}
+              <div className="absolute -bottom-5 left-[10%] right-[10%] mx-auto flex items-center justify-between divide-x divide-slate-100 rounded-[20px] border border-slate-100 bg-white px-6 py-4 shadow-[0_20px_40px_rgba(15,23,42,0.06)]">
                 {[
-                  ["Sources", "24"],
-                  ["Documents", "1,245"],
-                  ["Products", "12.4K"],
+                  ["Sources",     "24"],
+                  ["Documents",   "1,245"],
+                  ["Products",    "12.4K"],
                   ["Queries / day", "3,842"],
                 ].map(([label, value]) => (
-                  <div key={label} className="rounded-[22px] border border-slate-200 bg-white px-4 py-4 text-center shadow-[0_10px_20px_rgba(15,23,42,0.04)]">
-                    <div className="text-[12px] text-slate-500">{label}</div>
-                    <div className="mt-1 text-[25px] font-semibold tracking-[-0.05em] text-slate-950">{value}</div>
+                  <div key={label} className="flex-1 px-4 text-center first:pl-0 last:pr-0">
+                    <div className="text-[11px] text-slate-500">{label}</div>
+                    <div className="mt-1 text-[20px] font-semibold tracking-[-0.05em] text-slate-950">{value}</div>
                   </div>
                 ))}
               </div>

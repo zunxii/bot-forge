@@ -7,7 +7,11 @@ export function CTASection() {
   return (
     <section className="relative z-10">
       <Container className="py-16 lg:py-24">
-        <GlassCard className="relative overflow-hidden px-6 py-14 text-center sm:px-10 lg:px-14">
+        {/* Ambient blob behind the card */}
+        <div className="pointer-events-none absolute inset-x-10 bottom-10 top-10 rounded-[60px] bg-[radial-gradient(ellipse_at_center,rgba(130,150,255,0.12)_0%,rgba(255,255,255,0)_70%)] blur-3xl" />
+
+        <GlassCard className="reveal relative overflow-hidden px-6 py-14 text-center sm:px-10 lg:px-14">
+          {/* Floating rotated icon boxes */}
           <div className="pointer-events-none absolute left-5 top-8 hidden rounded-2xl bg-white/80 p-3 shadow-[0_12px_35px_rgba(122,138,255,0.20)] lg:block">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#7888ff] rotate-[-16deg] shadow-sm">
               <span className="text-xl font-semibold">T</span>

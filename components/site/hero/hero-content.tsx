@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Globe } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, Globe } from "lucide-react";
 
 export function HeroContent() {
   return (
@@ -35,10 +35,10 @@ export function HeroContent() {
           <ArrowRight className="h-4 w-4" />
         </Link>
 
-        <Link href="#" className="inline-flex h-12 items-center gap-3 text-[14px] font-semibold text-slate-800">
+        <Link href="#" className="inline-flex h-12 items-center gap-3 text-[14px] font-semibold text-slate-800 transition hover:text-slate-950">
           <span>See how it works</span>
           <span className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm">
-            <ArrowRight className="h-4 w-4 rotate-45 text-slate-700" />
+            <ArrowUpRight className="h-4 w-4 text-slate-600" />
           </span>
         </Link>
       </div>

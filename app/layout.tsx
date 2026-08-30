@@ -18,6 +18,8 @@ export const metadata: Metadata = {
     "Premium AI chatbot infrastructure for business websites. Train on your content, connect live data, and deploy a branded assistant.",
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-screen bg-[#fbfbfd] text-slate-950">{children}</body>
+      <body className="min-h-screen bg-[#fbfbfd] text-slate-950">
+        {children}
+        <Toaster position="bottom-right" />
+      </body>
     </html>
   );
 }

@@ -40,26 +40,17 @@ export function WebsiteIntelligencePanel() {
           </div>
           <p className="mt-1 text-sm text-slate-500">Detected from your website</p>
         </div>
-
-        <div className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-500 shadow-sm">
-          Auto-detected
-        </div>
       </div>
 
       <div className="mt-5 rounded-[26px] border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.03)]">
         <div className="flex items-center gap-4">
-          <div className="relative flex h-20 w-20 items-center justify-center">
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background:
-                  "conic-gradient(#4f46e5 0 28%, #93c5fd 28% 48%, #c4b5fd 48% 66%, #e2e8f0 66% 100%)",
-              }}
-            />
-            <div className="absolute inset-2 rounded-full bg-white" />
-            <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-white">
-              <Bot className="h-5 w-5" />
-            </div>
+          <div className="relative flex h-[72px] w-[72px] items-center justify-center">
+            {/* Simple pie chart representation */}
+            <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90 transform">
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#e2e8f0" strokeWidth="20" />
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#111827" strokeWidth="20" strokeDasharray="251.2" strokeDashoffset="188.4" />
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3B82F6" strokeWidth="20" strokeDasharray="251.2" strokeDashoffset="226.08" className="rotate-[-90deg] origin-center" />
+            </svg>
           </div>
 
           <div className="min-w-0">
@@ -70,7 +61,7 @@ export function WebsiteIntelligencePanel() {
           </div>
         </div>
 
-        <div className="mt-4 divide-y divide-slate-200 rounded-[22px] border border-slate-200 bg-[#fbfbfd] px-4">
+        <div className="mt-6 space-y-1">
           <DetailRow label="Primary color" value="#111827" swatch="#111827" />
           <DetailRow label="Accent color" value="#3B82F6" swatch="#3B82F6" />
           <DetailRow label="Typography" value="Inter" />
@@ -94,7 +85,8 @@ export function WebsiteIntelligencePanel() {
         </div>
       </div>
 
-      <div className="mt-4 rounded-[26px] border border-indigo-100 bg-indigo-50/80 px-5 py-4 text-sm leading-6 text-indigo-700 shadow-[0_12px_30px_rgba(79,70,229,0.06)]">
+      <div className="mt-4 flex items-center gap-3 rounded-2xl bg-[#f5f3ff] px-5 py-4 text-[13px] font-medium leading-6 text-indigo-700">
+        <Sparkles className="h-4 w-4 shrink-0" />
         We&apos;ll use your brand colors, fonts, and tone to create a seamless experience.
       </div>
     </section>

@@ -50,11 +50,12 @@ export async function proxy(request: NextRequest) {
   );
 
   if (isProtectedRoute && !user) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    // Temporarily bypass authentication check
+    // return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
   if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    // return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return response;

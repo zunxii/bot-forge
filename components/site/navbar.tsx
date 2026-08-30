@@ -1,12 +1,15 @@
-import { createClient } from "@/lib/supabase/server";
 import { NavbarClient } from "./navbar-client";
 
 export async function Navbar() {
-  const supabase = await createClient();
+  // Mock a custom user so you can view the logged-in state without signing in
+  const mockUser = {
+    id: "mock-123",
+    email: "junaid@acme.com",
+    user_metadata: {
+      full_name: "Junaid Khan",
+      avatar_url: "",
+    },
+  } as any;
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  return <NavbarClient user={user} />;
+  return <NavbarClient user={mockUser} />;
 }
