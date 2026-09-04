@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/groq": "^4.0.11",
+    "@google/genai": "^2.10.0",
     "@napi-rs/canvas": "^1.0.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.107.0",
