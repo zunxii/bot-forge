@@ -1,6 +1,11 @@
-import { Check } from "lucide-react";
+"use client";
 
-export function AssistantStepper({ currentStep = 1 }: { currentStep?: number }) {
+import { Check } from "lucide-react";
+import { useWizard } from "@/lib/wizard/wizard-context";
+
+export function AssistantStepper({ currentStep: propStep }: { currentStep?: number }) {
+  const wizard = useWizard();
+  const currentStep = propStep ?? wizard.stepIndex + 1;
   const steps = [
     { no: 1, label: "Website", active: currentStep === 1, completed: currentStep > 1 },
     { no: 2, label: "Sources", active: currentStep === 2, completed: currentStep > 2 },

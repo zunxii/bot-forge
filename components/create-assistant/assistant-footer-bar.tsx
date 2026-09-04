@@ -1,17 +1,24 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { useWizard } from "@/lib/wizard/wizard-context";
 
-export function AssistantFooterBar({
-  currentStep,
-  onNext,
-  onBack,
-  isDeploying,
-}: {
-  currentStep: number;
-  onNext: () => void;
-  onBack: () => void;
+interface AssistantFooterBarProps {
+  currentStep?: number;
+  onNext?: () => void;
+  onBack?: () => void;
   isDeploying?: boolean;
-}) {
+}
+
+export function AssistantFooterBar(props: AssistantFooterBarProps) {
+  const wizard = useWizard();
+
+  const currentStep = props.currentStep ?? wizard.stepIndex + 1;
+  const onNext = props.onNext ?? wizard.goNext;
+  const onBack = props.onBack ?? wizard.goBack;
+  const isDeploying = props.isDeploying ?? wizard.state.isFinalizing;
+
   return (
     <div className="sticky bottom-0 border-t border-slate-900/5 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1160px] items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
