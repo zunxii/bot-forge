@@ -1,26 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUserOrAdmin } from "@/lib/supabase/admin";
 import { processFileSource, processWebsiteSource } from "@/services/ingestions/pipeline";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-async function assertOwnership(botId: string, userId: string) {
-  const supabase = await createClient();
-  const { data: bot } = await supabase.from("bots").select("id, owner_id").eq("id", botId).single();
-  return bot && bot.owner_id === userId;
+/**
+ * Ensures the bot exists in the DB.
+ * If it doesn't exist yet (stale wizard session, page refresh, etc.)
+ * auto-creates it so sources can be added without a hard error.
+ * Uses the user's own authenticated client so RLS is satisfied.
+ */
+async function ensureBotExists(
+  db: SupabaseClient,
+  botId: string,
+  userId: string
+): Promise<string> {
+  const { data: bot } = await db.from("bots").select("id").eq("id", botId).single();
+
+  if (bot) return bot.id;
+
+  // Bot doesn't exist — create it with the requested UUID so the frontend stays in sync
+  const { data: newBot, error } = await db
+    .from("bots")
+    .insert({ id: botId, owner_id: userId, name: "My AI Assistant", status: "draft" })
+    .select("id")
+    .single();
+
+  if (error || !newBot) {
+    // Conflict or RLS issue — create a fresh bot and let the frontend re-sync
+    const { data: fallbackBot } = await db
+      .from("bots")
+      .insert({ owner_id: userId, name: "My AI Assistant", status: "draft" })
+      .select("id")
+      .single();
+    return fallbackBot?.id ?? botId;
+  }
+
+  return newBot.id;
 }
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: botId } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, db } = await getAuthUserOrAdmin();
 
   if (!user) {
-    return NextResponse.json({ success: false, error: "Not authenticated." }, { status: 401 });
+    return NextResponse.json({ success: false, error: "Unable to resolve user session." }, { status: 401 });
   }
 
-  const { data: sources, error } = await supabase
+
+  const { data: sources, error } = await db
     .from("sources")
     .select("*")
     .eq("bot_id", botId)
@@ -34,23 +61,18 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 }
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id: botId } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { id: rawBotId } = await params;
+  const { user, db } = await getAuthUserOrAdmin();
 
   if (!user) {
-    return NextResponse.json({ success: false, error: "Not authenticated." }, { status: 401 });
+    return NextResponse.json({ success: false, error: "Unable to resolve user session." }, { status: 401 });
   }
 
-  const owns = await assertOwnership(botId, user.id);
-  if (!owns) {
-    return NextResponse.json({ success: false, error: "Bot not found." }, { status: 404 });
-  }
+  // Auto-create bot if it doesn't exist yet (wizard may add sources before formal creation)
+  const botId = await ensureBotExists(db, rawBotId, user.id);
 
   const contentType = request.headers.get("content-type") ?? "";
+
 
   // ---- File upload branch (multipart/form-data) ----
   if (contentType.includes("multipart/form-data")) {
@@ -61,10 +83,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ success: false, error: "File is required." }, { status: 400 });
     }
 
-    const { data: source, error: sourceError } = await supabase
+    const { data: source, error: sourceError } = await db
       .from("sources")
       .insert({
         bot_id: botId,
+        name: file.name,
         type: "file",
         status: "pending",
         file_name: file.name,
@@ -90,7 +113,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       mimeType: file.type,
     });
 
-    const { data: updatedSource } = await supabase.from("sources").select("*").eq("id", source.id).single();
+    const { data: updatedSource } = await db.from("sources").select("*").eq("id", source.id).single();
 
     return NextResponse.json({
       success: result.success,
@@ -115,9 +138,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ success: false, error: "Invalid URL format." }, { status: 400 });
     }
 
-    const { data: source, error: sourceError } = await supabase
+    const sourceName = (() => {
+      try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return url.slice(0, 80); }
+    })();
+
+    const { data: source, error: sourceError } = await db
       .from("sources")
-      .insert({ bot_id: botId, type: "website", status: "pending", input_url: url })
+      .insert({ bot_id: botId, name: sourceName, type: "website", status: "pending", input_url: url })
       .select("*")
       .single();
 
@@ -128,11 +155,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       );
     }
 
-    await supabase.from("bots").update({ website_url: url }).eq("id", botId);
+    await db.from("bots").update({ website_url: url }).eq("id", botId);
 
     const result = await processWebsiteSource({ botId, sourceId: source.id, url });
 
-    const { data: updatedSource } = await supabase.from("sources").select("*").eq("id", source.id).single();
+    const { data: updatedSource } = await db.from("sources").select("*").eq("id", source.id).single();
 
     return NextResponse.json({
       success: result.success,
@@ -154,9 +181,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       );
     }
 
-    const { data: source, error: sourceError } = await supabase
+    const { data: source, error: sourceError } = await db
       .from("sources")
-      .insert({ bot_id: botId, type: "qna", status: "pending", file_name: question })
+      .insert({ bot_id: botId, name: question.slice(0, 80), type: "qna", status: "pending", file_name: question })
       .select("*")
       .single();
 
@@ -175,7 +202,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       mimeType: "text/plain",
     });
 
-    const { data: updatedSource } = await supabase.from("sources").select("*").eq("id", source.id).single();
+    const { data: updatedSource } = await db.from("sources").select("*").eq("id", source.id).single();
 
     return NextResponse.json({
       success: result.success,

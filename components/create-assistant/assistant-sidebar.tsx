@@ -1,18 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { signOutAction } from "@/actions/auth";
+import type { User } from "@supabase/supabase-js";
 import {
   BarChart3,
   Database,
   Bot,
   Crown,
-  LayoutDashboard,
+  LogOut,
   Plug,
   Settings2,
   ArrowRight,
-  CircleHelp,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -52,7 +55,26 @@ const getNavItems = (assistantId?: string) => [
 export function AssistantSidebar({ assistantId }: { assistantId?: string }) {
   const pathname = usePathname();
   const navItems = getNavItems(assistantId);
-  
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user) {
+        setUser(data.user);
+      }
+    });
+  }, []);
+
+  const displayName = user?.user_metadata?.full_name ?? user?.email ?? "User Account";
+  const initials = displayName
+    .split(" ")
+    .map((p: string) => p[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <aside className="hidden w-[260px] flex-col border-r border-zinc-200/60 bg-zinc-50/50 lg:flex">
       <div className="sticky top-0 flex h-screen flex-col overflow-y-auto">
@@ -117,16 +139,22 @@ export function AssistantSidebar({ assistantId }: { assistantId?: string }) {
           {/* User Profile */}
           <div className="rounded-xl border border-zinc-200/60 bg-white p-2.5 shadow-sm transition hover:border-zinc-300/80">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-white">
-                <span className="text-xs font-medium">JK</span>
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-white font-semibold text-xs">
+                {initials}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium tracking-tight text-zinc-950 truncate">Junaid Khan</div>
-                <div className="text-[11px] text-zinc-500 truncate">junaid@acme.com</div>
+                <div className="text-sm font-medium tracking-tight text-zinc-950 truncate">
+                  {displayName}
+                </div>
+                <div className="text-[11px] text-zinc-500 truncate">
+                  {user?.email ?? "Signed in"}
+                </div>
               </div>
-              <button onClick={() => toast.info('User settings opened')} className="rounded-lg p-1.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-900">
-                <LayoutDashboard className="h-4 w-4" />
-              </button>
+              <form action={signOutAction}>
+                <button type="submit" title="Sign out" className="rounded-lg p-1.5 text-zinc-400 transition hover:bg-rose-50 hover:text-rose-600">
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </form>
             </div>
           </div>
         </div>

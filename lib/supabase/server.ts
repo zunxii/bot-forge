@@ -13,9 +13,15 @@ export async function createClient() {
           return cookieStore.getAll();
         },
 
-        setAll() {
-          // Cookie writes are not allowed in Server Components.
-          // Middleware will handle session refreshes.
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // Silently ignore when called from a read-only Server Component.
+            // The proxy (middleware) handles session refresh in that case.
+          }
         },
       },
     }

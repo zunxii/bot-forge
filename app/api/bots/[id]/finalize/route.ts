@@ -1,19 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUserOrAdmin } from "@/lib/supabase/admin";
 
 export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: botId } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, db } = await getAuthUserOrAdmin();
 
   if (!user) {
-    return NextResponse.json({ success: false, error: "Not authenticated." }, { status: 401 });
+    return NextResponse.json({ success: false, error: "Unable to resolve user session." }, { status: 401 });
   }
 
-  const { data: sources } = await supabase
+  const { data: sources } = await db
     .from("sources")
     .select("status")
     .eq("bot_id", botId);
@@ -27,7 +23,7 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
     );
   }
 
-  const { data: bot, error } = await supabase
+  const { data: bot, error } = await db
     .from("bots")
     .update({ status: "ready" })
     .eq("id", botId)
@@ -58,3 +54,4 @@ export default function App() {
     embed: { scriptSnippet, reactSnippet, publicId: bot.public_id },
   });
 }
+

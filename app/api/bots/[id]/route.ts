@@ -1,27 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUserOrAdmin } from "@/lib/supabase/admin";
 
 const PATCHABLE_FIELDS = ["name", "description", "website_url", "branding", "settings", "live_data"] as const;
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, db } = await getAuthUserOrAdmin();
 
   if (!user) {
-    return NextResponse.json({ success: false, error: "Not authenticated." }, { status: 401 });
+    return NextResponse.json({ success: false, error: "Unable to resolve user session." }, { status: 401 });
   }
 
-  const { data: bot, error } = await supabase.from("bots").select("*").eq("id", id).single();
+  const { data: bot, error } = await db.from("bots").select("*").eq("id", id).single();
 
   if (error || !bot) {
     return NextResponse.json({ success: false, error: "Bot not found." }, { status: 404 });
   }
 
-  const { data: sources } = await supabase
+  const { data: sources } = await db
     .from("sources")
     .select("*")
     .eq("bot_id", id)
@@ -32,14 +28,10 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, db } = await getAuthUserOrAdmin();
 
   if (!user) {
-    return NextResponse.json({ success: false, error: "Not authenticated." }, { status: 401 });
+    return NextResponse.json({ success: false, error: "Unable to resolve user session." }, { status: 401 });
   }
 
   const body = await request.json().catch(() => ({}));
@@ -53,7 +45,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     return NextResponse.json({ success: false, error: "No valid fields to update." }, { status: 400 });
   }
 
-  const { data: bot, error } = await supabase
+  const { data: bot, error } = await db
     .from("bots")
     .update(patch)
     .eq("id", id)
@@ -69,17 +61,13 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
 export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, db } = await getAuthUserOrAdmin();
 
   if (!user) {
-    return NextResponse.json({ success: false, error: "Not authenticated." }, { status: 401 });
+    return NextResponse.json({ success: false, error: "Unable to resolve user session." }, { status: 401 });
   }
 
-  const { error } = await supabase.from("bots").delete().eq("id", id);
+  const { error } = await db.from("bots").delete().eq("id", id);
 
   if (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
@@ -87,3 +75,4 @@ export async function DELETE(_request: NextRequest, { params }: { params: Promis
 
   return NextResponse.json({ success: true });
 }
+

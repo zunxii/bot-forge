@@ -1,13 +1,7 @@
-import {
-  BadgeCheck,
-  Database,
-  FileText,
-  Globe,
-  Layers3,
-  Sparkles,
-  Type,
-  Bot,
-} from "lucide-react";
+"use client";
+
+import { Sparkles, Globe, ShieldCheck } from "lucide-react";
+import { useWizard } from "@/lib/wizard/wizard-context";
 
 function DetailRow({
   label,
@@ -19,10 +13,10 @@ function DetailRow({
   swatch?: string;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-200 py-3 last:border-0">
-      <div className="text-sm text-slate-600">{label}</div>
-      <div className="flex items-center gap-2 text-sm font-medium text-slate-950">
-        {swatch ? <span className="h-3 w-3 rounded-full" style={{ backgroundColor: swatch }} /> : null}
+    <div className="flex items-center justify-between border-b border-slate-100 py-2.5 last:border-0">
+      <div className="text-xs text-slate-500 font-medium">{label}</div>
+      <div className="flex items-center gap-2 text-xs font-semibold text-slate-900">
+        {swatch ? <span className="h-3 w-3 rounded-full shadow-sm" style={{ backgroundColor: swatch }} /> : null}
         {value}
       </div>
     </div>
@@ -30,64 +24,55 @@ function DetailRow({
 }
 
 export function WebsiteIntelligencePanel() {
+  const { state } = useWizard();
+
+  let hostname = "Not connected";
+  if (state.websiteUrl) {
+    try {
+      hostname = new URL(state.websiteUrl).hostname;
+    } catch {
+      hostname = state.websiteUrl;
+    }
+  }
+
   return (
-    <section className="rounded-[30px] border border-slate-900/5 bg-white/80 p-4 shadow-[0_12px_40px_rgba(15,23,42,0.04)] backdrop-blur-xl sm:p-6">
+    <section className="rounded-[30px] border border-slate-900/5 bg-white/80 p-5 shadow-[0_12px_40px_rgba(15,23,42,0.04)] backdrop-blur-xl">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-slate-950">
             <Sparkles className="h-4 w-4 text-indigo-500" />
-            <h3 className="text-lg font-medium">Website intelligence</h3>
+            <h3 className="text-base font-semibold">Website Intelligence</h3>
           </div>
-          <p className="mt-1 text-sm text-slate-500">Detected from your website</p>
+          <p className="mt-0.5 text-xs text-slate-500">Live detection from connected domain</p>
         </div>
       </div>
 
-      <div className="mt-5 rounded-[26px] border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.03)]">
-        <div className="flex items-center gap-4">
-          <div className="relative flex h-[72px] w-[72px] items-center justify-center">
-            {/* Simple pie chart representation */}
-            <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90 transform">
-              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#e2e8f0" strokeWidth="20" />
-              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#111827" strokeWidth="20" strokeDasharray="251.2" strokeDashoffset="188.4" />
-              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3B82F6" strokeWidth="20" strokeDasharray="251.2" strokeDashoffset="226.08" className="rotate-[-90deg] origin-center" />
-            </svg>
+      <div className="mt-4 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+            <Globe className="h-5 w-5" />
           </div>
-
-          <div className="min-w-0">
-            <div className="text-sm font-medium text-slate-950">Design DNA extracted</div>
-            <p className="mt-1 max-w-xs text-sm leading-6 text-slate-500">
-              We analyzed your site&apos;s visual identity to match your assistant experience.
+          <div className="min-w-0 flex-1">
+            <div className="text-xs font-semibold text-slate-900 truncate">{hostname}</div>
+            <p className="text-[11px] text-slate-500">
+              {state.websiteStatus === "success"
+                ? `Crawl active (${state.websiteSummary?.pageCount ?? 1} pages)`
+                : "Awaiting domain URL"}
             </p>
           </div>
         </div>
 
-        <div className="mt-6 space-y-1">
-          <DetailRow label="Primary color" value="#111827" swatch="#111827" />
-          <DetailRow label="Accent color" value="#3B82F6" swatch="#3B82F6" />
-          <DetailRow label="Typography" value="Inter" />
-          <DetailRow label="Tone of voice" value="Professional" />
-          <DetailRow label="Industry" value="E-commerce" />
+        <div className="mt-4 space-y-1">
+          <DetailRow label="Primary Color" value={state.brand.primaryColor} swatch={state.brand.primaryColor} />
+          <DetailRow label="Accent Color" value={state.brand.accentColor} swatch={state.brand.accentColor} />
+          <DetailRow label="Font" value={state.brand.font} />
+          <DetailRow label="Tone" value={state.brand.tone} />
         </div>
       </div>
 
-      <div className="mt-4 rounded-[26px] border border-slate-200 bg-white p-5 shadow-[0_12px_30px_rgba(15,23,42,0.03)]">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="text-sm font-medium text-slate-950">Apply website styling</div>
-            <p className="mt-1 text-sm leading-6 text-slate-500">
-              Make your assistant look and feel native to your website.
-            </p>
-          </div>
-
-          <div className="flex h-7 w-12 items-center rounded-full bg-indigo-500 p-1 shadow-sm">
-            <div className="ml-auto h-5 w-5 rounded-full bg-white shadow-sm" />
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-4 flex items-center gap-3 rounded-2xl bg-[#f5f3ff] px-5 py-4 text-[13px] font-medium leading-6 text-indigo-700">
-        <Sparkles className="h-4 w-4 shrink-0" />
-        We&apos;ll use your brand colors, fonts, and tone to create a seamless experience.
+      <div className="mt-3 flex items-center gap-2.5 rounded-xl bg-slate-50 px-3.5 py-3 text-xs text-slate-600">
+        <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
+        <span>RAG knowledge vector memory active.</span>
       </div>
     </section>
   );
